@@ -1,0 +1,184 @@
+.portal-page {
+    position: relative;
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  box-sizing: border-box;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.portal-page-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -2; 
+}
+
+.portal-page-background-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1; 
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.bubble-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.bubble {
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  overflow: hidden;
+  width: 1000px;
+  max-width: 90%;
+  height: 575px;
+}
+
+.login-section {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: white;
+}
+
+.logo img {
+  max-width: 100px;
+  margin-bottom: 10px;
+}
+
+.portal-page h1,
+.portal-page h2 {
+  margin: 10px 0;
+}
+
+.portal-page h2 {
+  color: wheat;
+  font-size: 17px;
+}
+
+.portal-page h3 {
+    border-top: 1px black solid;
+    border-bottom: 1px black solid;
+    font-size: 50px;
+    color: wheat;
+}
+
+
+.portal-page h1 {
+  font-size: 30px;
+}
+
+.portal-page p {
+  color: #000000;
+}
+
+.social-icons {
+  margin: 7.5px 0;
+}
+
+.social-icons a {
+  border: 10px solid #ffffff;
+  border-radius: 25%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  color: #2f2b51;
+}
+
+.divider {
+  margin: 5px 0;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+form {
+  width: 75%;
+}
+
+form input {
+  width: 75%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+form .login-btn {
+  padding: 10px;
+  background-color: #2f2b51;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.signup-section {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  flex: 0.8;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #333;
+}
+
+.signup-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.signup-section p {
+  margin-bottom: 20px;
+}
+
+.signup-section .signup-btn {
+  padding: 10px 20px;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #333;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .bubble {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .signup-section {
+    flex: 1;
+  }
+}
