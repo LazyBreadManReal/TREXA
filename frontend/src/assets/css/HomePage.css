@@ -20,6 +20,16 @@
     height: 9%;
     z-index: 1;
     border-bottom: 2px rgb(255, 255, 255, 0.5) solid;
+    animation: slideDown 1s ease-in-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 
 .header a {
@@ -205,7 +215,21 @@
     height: 400px;
     z-index: 1;
 }
+/* Sliding Effect for Category Section */
+.category-selection {
+    animation: slideUp 1s ease-in-out;
+}
 
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 .category-background {
     display: flex;
     position: relative;
@@ -247,6 +271,7 @@
     margin-bottom: 5px;
 }
 
+
 .image-carousel {
     width: 30%;
     height: 100%;
@@ -260,6 +285,14 @@
     height: 100%;
     object-fit: contain;
 }
+
+/* Smooth Image Appear */
+.bg_image img {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+
+
 
 
 .category-image-gradient {
@@ -312,6 +345,15 @@
     width: 80%;
     height: 70%;
     border: 1px solid black;
+}
+
+button, .category-see-all-button {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover, .category-see-all-button:hover {
+    transform: scale(1.05);
+    background-color: #e0cba8;
 }
 
 
@@ -476,23 +518,45 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: #fae9c7;
     border: 1px solid black;
+    position: relative; /* Ensures positioning works properly */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    overflow-y: hidden; /* Prevent vertical scrolling */
 }
 
 .top-books-selector-arrow {
     width: 3%;
     height: 15%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 24px;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 10;
+}
+
+.top-books-selector-arrow.left {
+    left: 5px;
+}
+
+.top-books-selector-arrow.right {
+    right: 5px;
 }
 
 .books-content {
-    width: 19%;
+    width: 20%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    flex: 0 0 auto; /* Prevents shrinking and ensures items remain inline */
 }
 
 .books-content img {

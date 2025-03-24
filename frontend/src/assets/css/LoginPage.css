@@ -1,4 +1,4 @@
-.portal-page {
+.login-page {
     position: relative;
   margin: 0;
   padding: 0;
@@ -10,7 +10,13 @@
   align-items: center;
 }
 
-.portal-page-background {
+.login-page a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+.login-page-background {
     position: fixed;
     top: 0;
     left: 0;
@@ -20,7 +26,7 @@
     z-index: -2; 
 }
 
-.portal-page-background-gradient {
+.login-page-background-gradient {
     position: fixed;
     top: 0;
     left: 0;
@@ -65,17 +71,17 @@
   margin-bottom: 10px;
 }
 
-.portal-page h1,
-.portal-page h2 {
+.login-page h1,
+.login-page h2 {
   margin: 10px 0;
 }
 
-.portal-page h2 {
+.login-page h2 {
   color: wheat;
   font-size: 17px;
 }
 
-.portal-page h3 {
+.login-page h3 {
     border-top: 1px black solid;
     border-bottom: 1px black solid;
     font-size: 50px;
@@ -83,11 +89,11 @@
 }
 
 
-.portal-page h1 {
+.login-page h1 {
   font-size: 30px;
 }
 
-.portal-page p {
+.login-page p {
   color: #000000;
 }
 
@@ -95,7 +101,7 @@
   margin: 7.5px 0;
 }
 
-.social-icons a {
+.social-icons img {
   border: 10px solid #ffffff;
   border-radius: 25%;
   display: inline-flex;
@@ -141,7 +147,7 @@ form .login-btn {
   margin: auto;
 }
 
-.signup-section {
+.signup-section-login {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(15px);
   flex: 0.8;
@@ -154,16 +160,16 @@ form .login-btn {
   color: #333;
 }
 
-.signup-section h2 {
+.signup-section-login h2 {
   font-size: 1.8rem;
   margin-bottom: 10px;
 }
 
-.signup-section p {
+.signup-section-login p {
   margin-bottom: 20px;
 }
 
-.signup-section .signup-btn {
+.signup-section-login .signup-btn {
   padding: 10px 20px;
   background-color: #fff;
   color: #333;
@@ -178,7 +184,7 @@ form .login-btn {
     height: auto;
   }
 
-  .signup-section {
+  .signup-section-login {
     flex: 1;
   }
 }
