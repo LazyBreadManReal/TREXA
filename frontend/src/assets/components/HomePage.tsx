@@ -1,15 +1,79 @@
-import { useState, useEffect } from "react";
-import "../css/HomePage.css"
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import "../css/HomePage.css";
 
 function HomePage() {
-  const [users, setUsers] = useState<{ id: number; name: string }[]>([]);
-  const [name, setName] = useState("");
+    const [name, setName] = useState("");
+    const [books, setBooks] = useState([]);
+    const scrollRef = useRef(null);
 
-  useEffect(() => {
-    fetch("/api/users")
-      .then(res => res.json())
-      .then(data => setUsers(data));
-  }, []);
+    const [categoryIndex, setCategoryIndex] = useState(0);
+
+    const categories = [
+        { image: "src/assets/images/categories/space.jpg", text: "Discover the mysteries of the universe" },
+        { image: "src/assets/images/categories/history.jpg", text: "Unravel the past with historical records" },
+        { image: "src/assets/images/categories/science.jpg", text: "Explore the world of science and innovation" },
+    ];
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            console.error("No token found, redirecting to login...");
+            window.location.href = "http://localhost:5173/login";
+            return;
+        }
+
+        axios
+            .get("http://localhost:5000/api/protected", {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((res) => {
+                setName(res.data.user.name);
+            })
+            .catch((err) => {
+                console.error("Error fetching user:", err);
+            });
+
+        // Fetch top books
+        axios
+            .get("http://localhost:5000/api/items")
+            .then((res) => {
+                setBooks(res.data); // Assuming the API returns an array of books
+            })
+            .catch((err) => {
+                console.error("Error fetching books:", err);
+            });
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCategoryIndex((prevIndex) => (prevIndex + 1) % categories.length);
+        }, 5000); // Switch every 5 seconds
+
+        return () => clearInterval(interval);
+    }, [categories.length]);
+
+    const handleNext = () => {
+        setCategoryIndex((prevIndex) => (prevIndex + 1) % categories.length);
+    };
+
+    const handlePrev = () => {
+        setCategoryIndex((prevIndex) => (prevIndex - 1 + categories.length) % categories.length);
+    };
+
+    // Scroll left and right functions
+    const scrollLeft = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+        }
+    };
+
+    const scrollRight = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+        }
+    };
 
   return (
     <>
@@ -37,7 +101,7 @@ function HomePage() {
                     <a href="#">About</a>
                     </li>
                     <li>
-                    <a href="http://localhost:5173/portal">Account</a>
+                    <a href="http://localhost:5173/login">{name ? name : "Account"} </a>
                     </li>
                 </ul>
                 </nav>
@@ -65,48 +129,51 @@ function HomePage() {
             </div>
             </div>
             <div className="category-selection">
-            <div className="category-background">
-                <div className="description-box">
-                <div className="category-description">
-                    <p>Discover the mysteries of the universe</p>
-                </div>
-                <div className="category-see-all">
-                    <button className="category-see-all-button">See All</button>
-                </div>
-                </div>
-                <div className="category-image-section">
-                <div className="image-carousel-section">
-                    <div className="image-carousel">
-                    <img
-                        src="src/assets/images/carousel/left-arrow-white.png"
-                        alt="left-arrow"
-                    />
-                    <img
-                        src="src/assets/images/carousel/unticked-circle-white.png"
-                        alt="unticked-circle"
-                    />
-                    <img
-                        src="src/assets/images/carousel/ticked-circle-white.png"
-                        alt="ticked-circle"
-                    />
-                    <img
-                        src="src/assets/images/carousel/unticked-circle-white.png"
-                        alt="unticked-circle"
-                    />
-                    <img
-                        src="src/assets/images/carousel/right-arrow-white.png"
-                        alt="right-arrow"
-                    />
+                <div className="category-background">
+                    <div className="description-box">
+                        <div className="category-description">
+                            <p>{categories[categoryIndex].text}</p>
+                        </div>
+                        <div className="category-see-all">
+                            <button className="category-see-all-button">See All</button>
+                        </div>
+                    </div>
+                    <div className="category-image-section">
+                        <div className="image-carousel-section">
+                            <div className="image-carousel">
+                                <img
+                                    src="src/assets/images/carousel/left-arrow-white.png"
+                                    alt="left-arrow"
+                                    onClick={handlePrev}
+                                    style={{ cursor: "pointer" }}
+                                />
+                                {categories.map((_, index) => (
+                                    <img
+                                        key={index}
+                                        src={
+                                            index === categoryIndex
+                                                ? "src/assets/images/carousel/ticked-circle-white.png"
+                                                : "src/assets/images/carousel/unticked-circle-white.png"
+                                        }
+                                        alt="indicator"
+                                    />
+                                ))}
+                                <img
+                                    src="src/assets/images/carousel/right-arrow-white.png"
+                                    alt="right-arrow"
+                                    onClick={handleNext}
+                                    style={{ cursor: "pointer" }}
+                                />
+                            </div>
+                        </div>
+                        <div className="category-image-gradient" />
+                        <img
+                            src={categories[categoryIndex].image}
+                            alt="category"
+                            className="category-image"
+                        />
                     </div>
                 </div>
-                <div className="category-image-gradient" />
-                <img
-                    src="src/assets/images/categories/space.jpg"
-                    alt="space category"
-                    className="category-image"
-                />
-                </div>
-            </div>
             </div>
         </div>
         <div className="lower_page">
@@ -151,43 +218,29 @@ function HomePage() {
             </div>
             </div>
             <div className="top-books-section">
-            <div className="top-books-title">
-                <h1>Top Books Of The Month</h1>
-            </div>
-            <div className="top-books-selector-section">
-                <div className="top-books-selector-content">
-                <img
-                    className="top-books-selector-arrow"
-                    src="src/assets/images/left-arrow-inverted.png"
-                    alt="left-arrow"
-                />
-                <div className="books-content">
-                    <img src="src/assets/images/books/placeholder.jpg" alt="placeholder" />
-                    <button>Preview</button>
+                <div className="top-books-title">
+                    <h1>Top Books Of The Month</h1>
                 </div>
-                <div className="books-content">
-                    <img src="src/assets/images/books/placeholder.jpg" alt="placeholder" />
-                    <button>Preview</button>
+                <div className="top-books-selector-section">
+                    <button className="scroll-button left" onClick={scrollLeft}>
+                        ◀
+                    </button>
+                    <div className="top-books-selector-content" ref={scrollRef}>
+                        {books.map((book) => (
+                            <div className="books-content" key={book.id}>
+                                <img
+                                    src={book.image_path ? `http://localhost:5000${book.image_path}` : "src/assets/images/books/placeholder.jpg"}
+                                    alt={book.title}
+                                    className="book-cover"
+                                />
+                                <button className="preview-btn">Preview</button>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="scroll-button right" onClick={scrollRight}>
+                        ▶
+                    </button>
                 </div>
-                <div className="books-content">
-                    <img src="src/assets/images/books/placeholder.jpg" alt="placeholder" />
-                    <button>Preview</button>
-                </div>
-                <div className="books-content">
-                    <img src="src/assets/images/books/placeholder.jpg" alt="placeholder" />
-                    <button>Preview</button>
-                </div>
-                <div className="books-content">
-                    <img src="src/assets/images/books/placeholder.jpg" alt="placeholder" />
-                    <button>Preview</button>
-                </div>
-                <img
-                    className="top-books-selector-arrow"
-                    src="src/assets/images/right-arrow-inverted.png"
-                    alt="right-arrow"
-                />
-                </div>
-            </div>
             </div>
             <div className="footer">
             <div className="footer-section">
