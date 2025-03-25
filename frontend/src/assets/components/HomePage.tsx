@@ -18,12 +18,6 @@ function HomePage() {
     useEffect(() => {
         const token = localStorage.getItem("token");
 
-        if (!token) {
-            console.error("No token found, redirecting to login...");
-            window.location.href = "http://localhost:5173/login";
-            return;
-        }
-
         axios
             .get("http://localhost:5000/api/protected", {
                 headers: { Authorization: `Bearer ${token}` },
@@ -83,10 +77,10 @@ function HomePage() {
                 <nav>
                 <ul>
                     <li>
-                    <a href="#">Home</a>
+                    <a href="http://localhost:5173/">Home</a>
                     </li>
                     <li>
-                    <a href="#">Archives</a>
+                    <a href="http://localhost:5173/archives">Archives</a>
                     </li>
                 </ul>
                 </nav>
