@@ -46,6 +46,17 @@ db.run(`
   if (err) console.error("Error creating items table:", err.message);
 });
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS hearts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    book_id INTEGER,
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(book_id) REFERENCES items(id)
+  )
+`, (err) => {
+  if (err) console.error("Error creating hearts table:", err.message);
+});
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -161,5 +172,71 @@ app.delete('/api/items/:id', (req, res) => {
       res.json({ message: "Item deleted successfully" });
   });
 });
+
+//API search item 
+app.get("/api/search/:search_key", (req, res) => {
+  const { search_key } = req.params;
+
+  db.all(`SELECT * FROM items WHERE title LIKE ?`, [`%${search_key}%`], (err, rows) => {
+      if (err) {
+          return res.status(500).json({ error: err.message });
+      }
+      res.json(rows); // Send the books list
+  });
+});
+
+//api get hearts
+app.get("/api/hearts/:user_id", (req, res) => {
+  const { user_id } = req.params;
+
+  db.all(
+      `SELECT items.* FROM hearts 
+       JOIN items ON hearts.book_id = items.id 
+       WHERE hearts.user_id = ?`,
+      [user_id],
+      (err, rows) => {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json(rows); // Send back liked books
+      }
+  );
+});
+
+
+
+//API FOR HEARTS
+app.post("/api/toggle-heart", (req, res) => {
+  const { user_id, book_id } = req.body;
+
+  if (!user_id || !book_id) {
+      return res.status(400).json({ error: "Missing user_id or book_id" });
+  }
+
+  // Check if the heart already exists
+  db.get(`SELECT * FROM hearts WHERE user_id = ? AND book_id = ?`, [user_id, book_id], (err, row) => {
+      if (err) {
+          return res.status(500).json({ error: err.message });
+      }
+
+      if (row) {
+          // If heart exists, remove it (Unlike)
+          db.run(`DELETE FROM hearts WHERE user_id = ? AND book_id = ?`, [user_id, book_id], (err) => {
+              if (err) {
+                  return res.status(500).json({ error: err.message });
+              }
+              res.json({ message: "Heart removed", liked: false });
+          });
+      } else {
+          // If heart doesn't exist, add it (Like)
+          db.run(`INSERT INTO hearts (user_id, book_id) VALUES (?, ?)`, [user_id, book_id], (err) => {
+              if (err) {
+                  return res.status(500).json({ error: err.message });
+              }
+              res.json({ message: "Heart added", liked: true });
+          });
+      }
+  });
+});
+
+
 
 app.listen(5000, () => console.log("Server running on port 5000"));
