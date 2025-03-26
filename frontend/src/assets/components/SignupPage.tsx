@@ -40,70 +40,24 @@ function SignupPage() {
   };
   return (
     <div className="signup-page">
-        <img src="src/assets/images/archival_bg.jpg" alt="" className="login-page-background"/>
-        <div className="login-page-background-gradient"></div>
-        <div className="container">
-            <div className="left-section">
-                <h1>Welcome!</h1>
-                <p>Join us and discover a great amount of new opportunities.</p>
-            </div>
-            <div className="signup-section">
-                <h2>Create an Account</h2>
-                <form id="signup-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="fullname">Full Name</label>
-                    <input
-                    type="text"
-                    id="fullname"
-                    placeholder="Enter your full name"
-                    onChange={(e) => setName(e.target.value)}
-                    required=""
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required=""
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required=""
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="confirm-password">Confirm Password</label>
-                    <input
-                    type="password"
-                    id="confirm-password"
-                    placeholder="Confirm your password"
-                    onChange={(e) => setPassword2(e.target.value)}
-                    required=""
-                    />
-                </div>
-                <button type="submit" className="btn">
-                    Sign Up
-                </button>
-                <div>{message}</div>
-                <div className="login-link">
-                    <p>
-                    Already have an account? <a href="http://localhost:5173/login">Sign In</a>
-                    </p>
-                </div>
-                </form>
-            </div>
+      <img src="src/assets/images/backgrounds/background.jpg" alt="" className="login-background" />
+      <div className="bg-gradient"></div>
+      <div className="signup-section">
+        <a href="http://localhost:5173/"className="page-logo">TREXA</a>
+        <h1>Create an Account</h1>
+        <form id="signup-form" onSubmit={handleSubmit}>
+            <input type="text" id="fullname" placeholder="Enter your full name" onChange={(e) => setName(e.target.value)} required/>
+            <input type="email" id="email" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} required />
+            <input type="password" id="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} required />
+            <input type="password" id="confirm-password" placeholder="Confirm your password" onChange={(e) => setPassword2(e.target.value)} required />
+            <button type="submit" className="signup-btn"> Sign Up </button>
+        </form>
+        <div className="divert">
+            <p> Already have an account? <a href="http://localhost:5173/login">Sign In</a> </p>
         </div>
+        <div className="message">{message}</div>
+      </div>
     </div>
-
   );
 }
 

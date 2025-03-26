@@ -1,0 +1,67 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+/* Apply animation to login section */
+.profile-section {
+  animation: slideUpFade 0.8s ease-out forwards;
+}
+
+.profile-page {
+  width: 100%;  
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-background {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+}
+
+.profile-section {
+  width: 50%;
+  height: 70%;
+  padding: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.80);
+  border-radius: 10px;
+}
+
+.page-logo {
+  height: 10%;
+  padding: 2%;
+  color: #000000;
+  font-size: 3rem;
+}
+
+.profile-section h1 {
+  height: 10%;
+  font-size: 5rem;
+}
+
+.profile-section p {
+  height: 10%;
+  margin-top: 5%;
+  font-size: 2rem;
+}
+
+.profile-section button {
+  width: 90%;
+  height: 10%;
+  border: none;
+  justify-self: flex-end;
+  border-radius: 5px;
+  background-color: #3f3f3f;
+  color: white;
+  font-family: 'PP Hatton', serif;
+  font-size: 2rem;
+  font-weight: thin; /* Medium */
+}
