@@ -63,6 +63,53 @@ function HomePage() {
                 </p>
             </div>
         </div>
+        <div className="section sec4">
+            <div className="featured-notes-section">
+                <h1>
+                    Featured Notes
+                </h1>
+                <div className="featured-cards-section">
+                    <div className="featured-cards">
+                        <div className="featured-card">
+                            <h2>
+                                Math
+                            </h2>
+                            <img src="src/assets/images/icons/menu.png" alt="" />
+                            <div className="stars">
+
+                            </div>
+                            <p>ratings</p>
+                            <button className="Download"></button>
+                            <button className="View Details"></button>
+                        </div>
+                        <div className="featured-card">
+                            <h2>
+                                Math
+                            </h2>
+                            <img src="src/assets/images/icons/menu.png" alt="" />
+                            <div className="stars">
+
+                            </div>
+                            <p>ratings</p>
+                            <button className="Download"></button>
+                            <button className="View Details"></button>
+                        </div>
+                        <div className="featured-card">
+                            <h2>
+                                Math
+                            </h2>
+                            <img src="src/assets/images/icons/menu.png" alt="" />
+                            <div className="stars">
+
+                            </div>
+                            <p>ratings</p>
+                            <button className="Download"></button>
+                            <button className="View Details"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   );
 }
