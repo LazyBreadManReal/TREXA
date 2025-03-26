@@ -34,28 +34,15 @@ db.run(`
 });
 
 db.run(`
-  CREATE TABLE IF NOT EXISTS Cameras (
+  CREATE TABLE IF NOT EXISTS notes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     title TEXT NOT NULL,
-    description TEXT NOT NULL,
     image_path TEXT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id)
   )
 `, (err) => {
-  if (err) console.error("Error creating items table:", err.message);
-});
-
-db.run(`
-  CREATE TABLE IF NOT EXISTS hearts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    book_id INTEGER,
-    FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(book_id) REFERENCES items(id)
-  )
-`, (err) => {
-  if (err) console.error("Error creating hearts table:", err.message);
+  if (err) console.error("Error creating Notes table:", err.message);
 });
 
 const storage = multer.diskStorage({
@@ -136,25 +123,30 @@ app.post("/api/signup", (req, res) => {
 });
 
 // API endpoint to upload an image
-app.post('/api/upload', upload.single('image'), (req, res) => {
-  const { user_id, title, content } = req.body;
+app.post('/api/notes', upload.single('image'), (req, res) => {
+  const { user_id, title } = req.body;
+
+  if (!req.file) {
+    return res.status(400).json({ error: "No image uploaded" });
+  }
+
   const imagePath = `/uploads/${req.file.filename}`;
 
   db.run(
-      `INSERT INTO items (user_id, title, content, image_path) VALUES (?, ?, ?, ?)`,
-      [user_id, title, content, imagePath],
-      function (err) {
-          if (err) {
-              return res.status(500).json({ error: err.message });
-          }
-          res.json({ id: this.lastID, title, content, imagePath });
+    `INSERT INTO notes (user_id, title, image_path) VALUES (?, ?, ?)`,
+    [user_id, title, imagePath],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
       }
+      res.json({ id: this.lastID, title, imagePath });
+    }
   );
 });
 
 // API endpoint to get uploaded items
-app.get('/api/items', (req, res) => {
-  db.all(`SELECT * FROM items`, [], (err, rows) => {
+app.get('/api/notes', (req, res) => {
+  db.all(`SELECT * FROM notes`, [], (err, rows) => {
       if (err) {
           return res.status(500).json({ error: err.message });
       }
@@ -163,9 +155,9 @@ app.get('/api/items', (req, res) => {
 });
 
 // API endpoint to delete an item
-app.delete('/api/items/:id', (req, res) => {
+app.delete('/api/notes/:id', (req, res) => {
   const { id } = req.params;
-  db.run(`DELETE FROM items WHERE id =?`, [id], (err) => {
+  db.run(`DELETE FROM notes WHERE id =?`, [id], (err) => {
       if (err) {
           return res.status(500).json({ error: err.message });
       }
@@ -174,10 +166,10 @@ app.delete('/api/items/:id', (req, res) => {
 });
 
 //get specific book
-app.get("/api/book/:id", (req, res) => {
+app.get("/api/notes/:id", (req, res) => {
   const { id } = req.params;
 
-  db.get(`SELECT * FROM items WHERE id = ?`, [id], (err, row) => {
+  db.get(`SELECT * FROM notes WHERE id = ?`, [id], (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: "Book not found" });
 
@@ -190,66 +182,12 @@ app.get("/api/book/:id", (req, res) => {
 app.get("/api/search/:search_key", (req, res) => {
   const { search_key } = req.params;
 
-  db.all(`SELECT * FROM items WHERE title LIKE ?`, [`%${search_key}%`], (err, rows) => {
+  db.all(`SELECT * FROM notes WHERE title LIKE ?`, [`%${search_key}%`], (err, rows) => {
       if (err) {
           return res.status(500).json({ error: err.message });
       }
       res.json(rows); // Send the books list
   });
 });
-
-//api get hearts
-app.get("/api/hearts/:user_id", (req, res) => {
-  const { user_id } = req.params;
-
-  db.all(
-      `SELECT items.* FROM hearts 
-       JOIN items ON hearts.book_id = items.id 
-       WHERE hearts.user_id = ?`,
-      [user_id],
-      (err, rows) => {
-          if (err) return res.status(500).json({ error: err.message });
-          res.json(rows); // Send back liked books
-      }
-  );
-});
-
-
-
-//API FOR HEARTS
-app.post("/api/toggle-heart", (req, res) => {
-  const { user_id, book_id } = req.body;
-
-  if (!user_id || !book_id) {
-      return res.status(400).json({ error: "Missing user_id or book_id" });
-  }
-
-  // Check if the heart already exists
-  db.get(`SELECT * FROM hearts WHERE user_id = ? AND book_id = ?`, [user_id, book_id], (err, row) => {
-      if (err) {
-          return res.status(500).json({ error: err.message });
-      }
-
-      if (row) {
-          // If heart exists, remove it (Unlike)
-          db.run(`DELETE FROM hearts WHERE user_id = ? AND book_id = ?`, [user_id, book_id], (err) => {
-              if (err) {
-                  return res.status(500).json({ error: err.message });
-              }
-              res.json({ message: "Heart removed", liked: false });
-          });
-      } else {
-          // If heart doesn't exist, add it (Like)
-          db.run(`INSERT INTO hearts (user_id, book_id) VALUES (?, ?)`, [user_id, book_id], (err) => {
-              if (err) {
-                  return res.status(500).json({ error: err.message });
-              }
-              res.json({ message: "Heart added", liked: true });
-          });
-      }
-  });
-});
-
-
 
 app.listen(5000, () => console.log("Server running on port 5000"));

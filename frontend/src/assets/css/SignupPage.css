@@ -1,115 +1,101 @@
-.signup-page {
+*{
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
+}
+
+/* Apply animation to login section */
+.signup-section {
+  animation: slideUpFade 0.8s ease-out forwards;
+}
+
+.signup-page {
+  width: 100%;  
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-background-attachment: fixed;
-background-repeat: no-repeat;
-background-size: 100%;
 }
 
-.container {
-  display: flex;
-  border-radius: 25px;
-  overflow: hidden;
-  width: 900px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  animation: blur 1s;
+.signup-background {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
 }
 
-.left-section {
-  background: linear-gradient(225deg, #96969659, #30303062);
-  backdrop-filter: blur(20px);
-  color: white;
-  padding: 60px 40px;
-  flex: 1;
+.signup-section {
+  width: 30%;
+  height: 70%;
+  padding: 2%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.80);
+  border-radius: 10px;
+}
+
+.signup-section p, .signup-section h1 {
+  height: 10%;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
+.socials-icons {
+  width: 80%;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
-.p {
-  font-size: 1rem;
-  margin-bottom: 20px;
-  text-align: center;
+.signup-section form {
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2%;
 }
 
-.signup-section {
-  flex: 1.25;
-  padding: 60px;
-  background: white;
-}
-
-.signup-section h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.form-group {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #555;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
+.signup-section input {
+  width: 90%;
+  height: 10%;
+  padding: 10px;
+  border: 2px dashed rgba(0, 0, 0, 0.5); /* Dotted red border */
   border-radius: 5px;
+  font-family: 'PP Hatton', serif;
   font-size: 1rem;
+  font-weight: thin; /* Medium */
+  opacity: 0.7;
 }
 
-.form-group input:focus {
-  border-color: #2f2b51;
-  outline: none;
-}
-
-.btn {
-  display: inline-block;
-  width: 100%;
-  background: #2f2b51;
-  color: white;
-  text-align: center;
-  padding: 10px 0;
-  font-size: 1rem;
+.signup-section button {
+  width: 90%;
+  height: 20%;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s ease;
+  background-color: #3f3f3f;
+  color: white;
+  font-family: 'PP Hatton', serif;
+  font-size: 2rem;
+  font-weight: thin; /* Medium */
 }
 
-.btn:hover {
-  background: #2f2b51;
+.divert {
+  height: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.login-link {
-  text-align: center;
-  margin-top: 20px;
-  color: #555;
-  font-size: 0.9rem;
-}
-
-.login-link a {
-  color: #2f2b51;
-  text-decoration: none;
-}
-
-.login-link a:hover {
-  text-decoration: underline;
+.message {
+  height: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
