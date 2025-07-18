@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
-const SECRET_KEY = "KEY HERE RAHH";
+const SECRET_KEY = process.env.SECRET_KEY;
 
 // Initialize database
 const db = new sqlite3.Database("./database.db", err => {
@@ -31,18 +31,6 @@ db.run(`
   )
 `, (err) => {
   if (err) console.error("Error creating users table:", err.message);
-});
-
-db.run(`
-  CREATE TABLE IF NOT EXISTS notes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    title TEXT NOT NULL,
-    image_path TEXT NOT NULL,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-  )
-`, (err) => {
-  if (err) console.error("Error creating Notes table:", err.message);
 });
 
 const storage = multer.diskStorage({
@@ -73,13 +61,13 @@ function verifyToken(req, res, next) {
 
   if (!authHeader) return res.status(401).json({ error: "No token provided" });
 
-  const token = authHeader.split(" ")[1]; // Extract token from "Bearer <TOKEN>"
+  const token = authHeader.split(" ")[1]; 
 
   if (!token) return res.status(401).json({ error: "Malformed token" });
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY); // Use your actual secret key
-    req.user = decoded; // Attach user data
+    const decoded = jwt.verify(token, SECRET_KEY); 
+    req.user = decoded; 
     next();
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });
@@ -120,74 +108,6 @@ app.post("/api/signup", (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ id: this.lastID, name });
     });
-});
-
-// API endpoint to upload an image
-app.post('/api/notes', upload.single('image'), (req, res) => {
-  const { user_id, title } = req.body;
-
-  if (!req.file) {
-    return res.status(400).json({ error: "No image uploaded" });
-  }
-
-  const imagePath = `/uploads/${req.file.filename}`;
-
-  db.run(
-    `INSERT INTO notes (user_id, title, image_path) VALUES (?, ?, ?)`,
-    [user_id, title, imagePath],
-    function (err) {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json({ id: this.lastID, title, imagePath });
-    }
-  );
-});
-
-// API endpoint to get uploaded items
-app.get('/api/notes', (req, res) => {
-  db.all(`SELECT * FROM notes`, [], (err, rows) => {
-      if (err) {
-          return res.status(500).json({ error: err.message });
-      }
-      res.json(rows);
-  });
-});
-
-// API endpoint to delete an item
-app.delete('/api/notes/:id', (req, res) => {
-  const { id } = req.params;
-  db.run(`DELETE FROM notes WHERE id =?`, [id], (err) => {
-      if (err) {
-          return res.status(500).json({ error: err.message });
-      }
-      res.json({ message: "Item deleted successfully" });
-  });
-});
-
-//get specific book
-app.get("/api/notes/:id", (req, res) => {
-  const { id } = req.params;
-
-  db.get(`SELECT * FROM notes WHERE id = ?`, [id], (err, row) => {
-      if (err) return res.status(500).json({ error: err.message });
-      if (!row) return res.status(404).json({ error: "Book not found" });
-
-      res.json(row);
-  });
-});
-
-
-//API search item 
-app.get("/api/search/:search_key", (req, res) => {
-  const { search_key } = req.params;
-
-  db.all(`SELECT * FROM notes WHERE title LIKE ?`, [`%${search_key}%`], (err, rows) => {
-      if (err) {
-          return res.status(500).json({ error: err.message });
-      }
-      res.json(rows); // Send the books list
-  });
 });
 
 app.listen(5000, () => console.log("Server running on port 5000"));
